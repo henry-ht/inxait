@@ -1,0 +1,22 @@
+body{
+    background-color: aqua !important;
+}
+.app-z-index-10{
+    z-index: 10;
+}
+
+.app-z-index-3{
+    z-index: 3;
+}
+
+.app-inside-position-1{
+    top: -2rem;
+}
+
+.app-inside-position-2{
+    top: -3rem;
+}
+
+.app-img-landing{
+    height: 25rem;
+}
