@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ContestExport;
 use App\Http\Requests\ContestCreateRequest;
 use App\Models\Contest;
 use App\Models\Department;
 use Illuminate\Http\Request;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 class ContestController extends Controller
 {
@@ -18,18 +21,23 @@ class ContestController extends Controller
     {
         $department     = Department::with(['cities'])->get();
         $contest_count  = Contest::count();
+        $name_winner    = null;
+        $winner_status  = false;
 
-        return view('landingContest', ['department' => $department, 'contest_count' => $contest_count]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if($contest_count == 5){
+           $this->lottery();
+           $winner = Contest::where('winner', 1)->first();
+            if(isset($winner)){
+                $name_winner    = $winner->name.' '.$winner->last_name;
+                $winner_status  = $winner->winner;
+            }
+        }
+        return view('landingContest', [
+            'department'        => $department,
+            'contest_count'     => $contest_count,
+            'name_winner'       => $name_winner,
+            'winner_status'     => $winner_status,
+        ]);
     }
 
     /**
@@ -64,48 +72,20 @@ class ContestController extends Controller
         return back()->with('success', __('You are already registered among the contestants, wait for the draw'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Contest  $contest
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Contest $contest)
-    {
-        //
+    public function export() {
+        return Excel::download(new ContestExport, 'contest.xlsx');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Contest  $contest
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Contest $contest)
-    {
-        //
+    public function lottery(){
+        $limit = Contest::count();
+        $norepeat = Contest::where('winner', 1)->count();
+
+        if($limit == 5 && $norepeat == 0){
+            $winner = Contest::all()->random();
+
+            $winner->winner = true;
+            $winner->save();
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Contest  $contest
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Contest $contest)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Contest  $contest
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Contest $contest)
-    {
-        //
-    }
 }

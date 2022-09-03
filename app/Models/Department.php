@@ -24,4 +24,8 @@ class Department extends Model
     public function cities(){
         return $this->hasMany(City::class);
     }
+
+    public function contest(){
+        return $this->hasOne(Contest::class);
+    }
 }

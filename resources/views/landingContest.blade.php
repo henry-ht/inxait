@@ -106,24 +106,31 @@
                             <p class="mb-1 ">
                                 Participants: <b> {{$contest_count}} / 5 </b>
                             </p>
-                            <button class="btn btn-outline-light ml-0">
+                            <a href="{{route('contest.export')}}" target="_blank" class="btn btn-outline-light ml-0">
                                 Download xml
                                 <i class="fa-solid fa-download ms-1"></i>
-                            </button>
+                            </a>
                         </aside>
                         <aside class="col-md-4"></aside>
                         <aside class="col-md-4 mt-4 mt-md-0">
-                            <div class="h-100 d-flex justify-content-center align-items-center">
-                                <p class="mb-0">
-                                    <span class="me-2">
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                    </span>
-                                    WINNIE
-                                    <span class="ms-2">
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                    </span>
-                                </p>
-                            </div>
+                            @if ($winner_status == 1)
+                                <div class="h-100 d-flex justify-content-center align-items-center">
+                                    <div>
+                                        <span class="h3 mb-0 text-muted f-bold d-block">
+                                            Winner
+                                        </span>
+                                        <p class="mb-0 d-block">
+                                            <span class="me-2">
+                                                <i class="fa-solid fa-star text-warning"></i>
+                                            </span>
+                                            {{strtoupper($name_winner)}}
+                                            <span class="ms-2">
+                                                <i class="fa-solid fa-star text-warning"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
                         </aside>
                       </section>
                     </div>
