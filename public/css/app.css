@@ -18,6 +18,10 @@ body{
     top: -3rem;
 }
 
+.app-img-landing{
+    height: 25rem;
+}
+
 @charset "UTF-8";/*!
  * animate.css - https://animate.style/
  * Version - 4.1.1

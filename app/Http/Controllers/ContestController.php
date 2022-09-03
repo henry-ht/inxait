@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContestCreateRequest;
+use App\Models\Contest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
@@ -14,8 +16,10 @@ class ContestController extends Controller
      */
     public function index()
     {
-        $department = Department::with(['cities'])->get();
-        return view('landingContest', ['department' => $department]);
+        $department     = Department::with(['cities'])->get();
+        $contest_count  = Contest::count();
+
+        return view('landingContest', ['department' => $department, 'contest_count' => $contest_count]);
     }
 
     /**
@@ -34,18 +38,39 @@ class ContestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContestCreateRequest $request)
     {
-        //
+        $credentials = $request->only([
+            'name',
+            'last_name',
+            'identification_number',
+            'email',
+            'phone',
+            'department_id',
+            'city_id',
+            'habeas_data',
+        ]);
+
+        $limit = Contest::count();
+
+        if($limit == 5){
+            return back()->with('error', __('Sorry, the list of contestants is full'))->withInput($credentials);
+        }
+
+        $status = Contest::updateOrCreate([
+            'email' => $credentials['email']
+        ], $credentials);
+
+        return back()->with('success', __('You are already registered among the contestants, wait for the draw'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Contest  $contest
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Contest $contest)
     {
         //
     }
@@ -53,10 +78,10 @@ class ContestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Contest  $contest
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Contest $contest)
     {
         //
     }
@@ -65,10 +90,10 @@ class ContestController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Contest  $contest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Contest $contest)
     {
         //
     }
@@ -76,10 +101,10 @@ class ContestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Contest  $contest
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Contest $contest)
     {
         //
     }

@@ -17,7 +17,11 @@ class ContestFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'                  => fake()->name(),
+            'last_name'             => fake()->lastName(),
+            'email'                 => fake()->safeEmail(),
+            'phone'                 => $this->faker->e164PhoneNumber(),
+            'identification_number' => $this->faker->unique()->randomNumber($nbDigits = 9, $strict = true),
         ];
     }
 }

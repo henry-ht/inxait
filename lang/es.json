@@ -3,10 +3,20 @@
     "Privacy Policy": "Política de privacidad",
     "Home": "Inicio",
     "Name": "Nombre",
-    "last Name": "Apellido",
+    "Last name": "Apellidos",
     "Identification number": "Cedula",
     "Email Address": "Dirección de correo electrónico",
     "Phone": "Celular",
     "Register in the form": "Registrate en el formulario",
-    "Check in": "Registrarse"
+    "Check in": "Registrarse",
+    "I accept the": "Acepto los",
+    "Terms": "Términos",
+    "Conditions": "Condiciones",
+    "and": "y",
+    "You are already registered among the contestants, wait for the draw": "Ya estás registrado entre los concursantes, espera el sorteo",
+    "Sorry, the list of contestants is full": "Lo sentimos, la lista de concursantes esta llena",
+    "Department": "Departamento",
+    "Select department": "Seleccionar departamento",
+    "Select city": "Seleccionar ciudad",
+    "City": "Ciudad"
 }

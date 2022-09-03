@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [ContestController::class, 'index'])->name('contest');
+Route::post('/contest', [ContestController::class, 'store'])->name('contest.store');
 
 Route::get('/terminos-y-condiciones', function () {
     return view('welcome');

@@ -18,11 +18,12 @@ return new class extends Migration
             $table->string('name', 50);
             $table->string('last_name', 50);
             $table->string('phone', 20);
-            $table->integer('identification_number')->unique(); // numero de cedula
+            $table->numeric('identification_number')->unique(); // numero de cedula
             $table->string('email')->unique();
             $table->boolean('habeas_data')->default(true);
+            $table->boolean('winner')->default(false);
             $table->unsignedBigInteger('department_id');
-            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('city_id')->nullable();
             $table->timestamps();
 
 

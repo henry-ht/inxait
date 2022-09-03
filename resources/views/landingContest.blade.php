@@ -8,7 +8,69 @@
     <link rel="canonical" href="{{ route('contest') }}" />
     <meta name="robots" content="noindex, nofollow">
     <title>Cars Max</title>
+    <script type="text/javascript" >
+    window.onload = function(e){
+        let department      = document.getElementById("department_id");
+        let content_cities  = document.getElementById("content_cities");
+        department.addEventListener('change', function() {
+            let city    = document.getElementById("city_id");
+            cities      = JSON.parse(this.options[this.selectedIndex].getAttribute('data-cities'));
+
+            let options = city.getElementsByTagName('OPTION');
+            countOptions = city.options.length;
+            for (let i = 0; i < countOptions; i++) {
+                if(options[1]){
+                    city.removeChild(options[1]);
+                }
+            }
+            if(cities.length){
+                content_cities.classList.remove("d-none");
+
+                cities.forEach(element => {
+                    let option = document.createElement("option");
+                    option.text = element.name;
+                    option.value = element.id;
+                    var select = document.getElementById("id-to-my-select-box");
+                    city.appendChild(option);
+                });
+            }else{
+                content_cities.classList.add("d-none");
+            }
+
+        });
+    }
+</script>
 @stop
+
+@if (old('_token') !== null || Session::has('success') || Session::has('error'))
+    @section('scripts')
+        <script type="text/javascript" >
+            let myModal = new bootstrap.Modal(document.getElementById("modalContest"), {});
+            document.onreadystatechange = function () {
+                myModal.show();
+                let department      = document.getElementById("department_id");
+                let city            = document.getElementById("city_id");
+                let citySelected    = {{old('city_id') ?? 0}}
+                cities      = JSON.parse(department.options[department.selectedIndex].getAttribute('data-cities'));
+
+                console.log('city: ', citySelected)
+                if(cities.length){
+                    content_cities.classList.remove("d-none");
+
+                    cities.forEach(element => {
+                        let option = document.createElement("option");
+                        option.text = element.name;
+                        option.value = element.id;
+                        if(citySelected == element.id){
+                            option.selected = true;
+                        }
+                        city.appendChild(option);
+                    });
+                }
+            };
+        </script>
+    @stop
+@endif
 
 @section('content')
     <section class="row justify-content-center">
@@ -30,7 +92,7 @@
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem quis asperiores, consequuntur corporis rem provident tempora quaerat consequatur.
                       </p>
 
-                      <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-success rounded-pill btn-sm">
+                      <button type="button" data-bs-toggle="modal" data-bs-target="#modalContest" class="btn btn-outline-success rounded-pill btn-sm">
                         Go to the form
                       </button>
                     </div>
@@ -42,7 +104,7 @@
                       <section class="row">
                         <aside class="col-md-4 text-md-start text-sm-center">
                             <p class="mb-1 ">
-                                Participants: <b>50</b>
+                                Participants: <b> {{$contest_count}} / 5 </b>
                             </p>
                             <button class="btn btn-outline-light ml-0">
                                 Download xml
@@ -72,25 +134,35 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalContest" tabindex="-1" aria-labelledby="modalContest" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <h5 class="modal-title" id="modalContestTitle">
                     {{__('Register in the form')}}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body">
-                    {{-- {{ route('register') }} --}}
-                    <form method="POST" action="">
+                    @if(Session::has('success'))
+                        <div class="alert alert-success">
+                            {{Session::get('success')}}
+                        </div>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <div class="alert alert-danger">
+                            {{Session::get('error')}}
+                        </div>
+                    @endif
+                    <form method="POST" action="{{ route('contest.store') }}" >
                         @csrf
 
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -101,10 +173,10 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="last_name" class="col-md-4 col-form-label text-md-end">{{ __('last Name') }}</label>
+                            <label for="last_name" class="col-md-4 col-form-label text-md-end">{{ __('Last name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}"  autocomplete="last_name" autofocus>
 
                                 @error('last_name')
                                     <span class="invalid-feedback" role="alert">
@@ -118,7 +190,7 @@
                             <label for="identification_number" class="col-md-4 col-form-label text-md-end">{{ __('Identification number') }}</label>
 
                             <div class="col-md-6">
-                                <input id="identification_number" type="number" class="form-control @error('identification_number') is-invalid @enderror" name="identification_number" value="{{ old('identification_number') }}" required autocomplete="identification_number" autofocus>
+                                <input id="identification_number" type="number" class="form-control @error('identification_number') is-invalid @enderror" name="identification_number" value="{{ old('identification_number') }}"  autocomplete="identification_number" autofocus>
 
                                 @error('identification_number')
                                     <span class="invalid-feedback" role="alert">
@@ -132,7 +204,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -146,7 +218,7 @@
                             <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Phone') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
+                                <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}"  autocomplete="phone" autofocus>
 
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -157,18 +229,86 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="department_id" class="col-md-4 col-form-label text-md-end">{{ __('Department') }}</label>
 
-                            <div class="col-md-4 col-form-label text-md-end">
-                                <input type="checkbox" class="form-check-input text-md-end" value="{{ old('habeas_data') }}" id="habeas_data">
+                            <div class="col-md-6">
+
+                                <select class="form-select @error('department_id') is-invalid @enderror" name="department_id" id="department_id" >
+                                    <option selected disabled>
+                                        {{__('Select department')}}
+                                    </option>
+                                    @foreach ($department as $key => $value)
+                                        <option value="{{$value->id}}"
+                                            @if (old('department_id') == $value->id)
+                                                selected
+                                            @endif
+
+                                            data-cities="{{$value->cities}}"
+                                            >
+                                            {{$value->name}}
+                                        </option>
+                                    @endforeach
+                                  </select>
+
+                                @error('department_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 d-none" id="content_cities" >
+                            <label for="city_id" class="col-md-4 col-form-label text-md-end">{{ __('City') }}</label>
+
+                            <div class="col-md-6">
+
+                                <select class="form-select @error('city_id') is-invalid @enderror"  name="city_id" id="city_id" >
+                                    <option selected disabled>
+                                        {{__('Select city')}}
+                                    </option>
+
+                                  </select>
+
+                                @error('city_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+
+                            <div class="col-md-4 col-form-label">
+
 
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-check-label" for="habeas_data">
-                                    Acepto los <a href="#!" class="link-primary">Términos</a> y <a href="#!" class="link-primary">Condiciones</a>
-                                </label>
-                            </div>
 
+                                <label class="form-check-label" for="habeas_data">
+
+                                    <input type="checkbox" class="form-check-input text-md-end @error('habeas_data') is-invalid @enderror" name="habeas_data" value="{{old('habeas_data', 1)}}"
+
+                                @if (old('habeas_data') == 1)
+                                    checked="checked"
+                                @endif
+
+                                id="habeas_data" >
+
+
+                                    {{__('I accept the')}} <a href="#" class="link-primary"> {{__('Terms')}} </a> {{__('and')}} <a href="#!" class="link-primary">{{__('Conditions')}}</a>
+                                    @error('habeas_data')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </label>
+
+
+
+                            </div>
                         </div>
 
                         <div class="row mb-0">
@@ -184,3 +324,8 @@
         </div>
     </div>
 @stop
+
+
+
+
+
