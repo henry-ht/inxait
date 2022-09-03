@@ -26,15 +26,6 @@ class Contest extends Model
         'habeas_data',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'birthday'          => 'date:Y-m-d',
-    ];
-
 
     public function department(){
         return $this->belongsTo(Department::class);
