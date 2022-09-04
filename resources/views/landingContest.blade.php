@@ -48,12 +48,11 @@
             let myModal = new bootstrap.Modal(document.getElementById("modalContest"), {});
             document.onreadystatechange = function () {
                 myModal.show();
-                let department      = document.getElementById("department_id");
+                let department      = document.getElementById("departmen t_id");
                 let city            = document.getElementById("city_id");
                 let citySelected    = {{old('city_id') ?? 0}}
                 cities      = JSON.parse(department.options[department.selectedIndex].getAttribute('data-cities'));
 
-                console.log('city: ', citySelected)
                 if(cities.length){
                     content_cities.classList.remove("d-none");
 
