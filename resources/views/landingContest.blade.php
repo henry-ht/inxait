@@ -169,7 +169,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"  autocomplete="name" autofocus required >
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -183,7 +183,7 @@
                             <label for="last_name" class="col-md-4 col-form-label text-md-end">{{ __('Last name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}"  autocomplete="last_name" autofocus>
+                                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}"  autocomplete="last_name" autofocus required >
 
                                 @error('last_name')
                                     <span class="invalid-feedback" role="alert">
@@ -197,7 +197,7 @@
                             <label for="identification_number" class="col-md-4 col-form-label text-md-end">{{ __('Identification number') }}</label>
 
                             <div class="col-md-6">
-                                <input id="identification_number" type="number" class="form-control @error('identification_number') is-invalid @enderror" name="identification_number" value="{{ old('identification_number') }}"  autocomplete="identification_number" autofocus>
+                                <input id="identification_number" type="number" class="form-control @error('identification_number') is-invalid @enderror" name="identification_number" value="{{ old('identification_number') }}"  autocomplete="identification_number" autofocus required >
 
                                 @error('identification_number')
                                     <span class="invalid-feedback" role="alert">
@@ -211,7 +211,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" required>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -225,7 +225,7 @@
                             <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Phone') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}"  autocomplete="phone" autofocus>
+                                <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}"  autocomplete="phone" autofocus required>
 
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -240,7 +240,7 @@
 
                             <div class="col-md-6">
 
-                                <select class="form-select @error('department_id') is-invalid @enderror" name="department_id" id="department_id" >
+                                <select class="form-select @error('department_id') is-invalid @enderror" name="department_id" id="department_id" required >
                                     <option selected disabled>
                                         {{__('Select department')}}
                                     </option>
@@ -270,7 +270,7 @@
 
                             <div class="col-md-6">
 
-                                <select class="form-select @error('city_id') is-invalid @enderror"  name="city_id" id="city_id" >
+                                <select class="form-select @error('city_id') is-invalid @enderror"  name="city_id" id="city_id" required>
                                     <option selected disabled>
                                         {{__('Select city')}}
                                     </option>
@@ -296,7 +296,7 @@
 
                                 <label class="form-check-label" for="habeas_data">
 
-                                    <input type="checkbox" class="form-check-input text-md-end @error('habeas_data') is-invalid @enderror" name="habeas_data" value="{{old('habeas_data', 1)}}"
+                                    <input type="checkbox" class="form-check-input text-md-end @error('habeas_data') is-invalid @enderror" required name="habeas_data" value="{{old('habeas_data', 1)}}"
 
                                 @if (old('habeas_data') == 1)
                                     checked="checked"
